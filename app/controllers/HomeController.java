@@ -2,7 +2,7 @@ package controllers;
 
 import play.mvc.*;
 
-import io.ebean.Finder;
+import io.ebean.*;
 import java.util.List;
 
 import models.Users;
@@ -28,14 +28,8 @@ public class HomeController extends Controller {
     }
 
     public Result database() {
-        Finder<Long,Users> finder = new Finder<Long,Users>(Long.class,Users.class);
-        List<Users> users = finder.all();
+        List<Users> user = Ebean.find(Users.class).findList();
 
-        StringBuilder msg = new StringBuilder();
-        for (Users users : user) {
-            msg.append(user.toString()).append("\n");
-        }
-
-        return ok(views.html.database.render(msg.toString()));
+        return ok(views.html.database.render(user));
     }
 }
