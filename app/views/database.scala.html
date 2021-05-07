@@ -1,7 +1,9 @@
-@(msg:String)
-
+@(users: List[Users])
 
 @main("Sample page") {
   <h1>Hello!</h1>
-  <p>@msg</p>
+  @for(user <- users) {
+    <h1>@user.name</h1>
+    <p>@user.text</p>
+  }
 }
