@@ -63,22 +63,4 @@ public class FormController extends Controller {
         }
     }
 
-    public Result update(Http.Request request) {
-        final Form<WidgetData> boundForm = form.bindFromRequest(request);
-
-        if (boundForm.hasErrors()) {
-            logger.error("errors = {}", boundForm.errors());
-            return badRequest(views.html.board.render(asScala(widgets), boundForm, request, messagesApi.preferred(request)));
-        } else {
-            WidgetData data = boundForm.get();
-            User addUser = new User();
-            addUser.setName(data.getName());
-            addUser.setText(data.getText());
-            Ebean.save(addUser);
-            widgets.add(new Widget(addUser.getName(), addUser.getText()));
-            users.add(addUser);
-            return redirect(routes.FormController.showForm()).flashing("info", "書き込みました");
-        }
-    }
-
 }
