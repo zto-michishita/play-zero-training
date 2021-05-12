@@ -24,13 +24,13 @@
       }
   }
 
-  @helper.form(routes.FormController.createWidget) {
+  @helper.form(routes.FormController.create) {
       @helper.CSRF.formField
 
       @helper.inputText(form("name"))
 
       @helper.inputText(form("text"))
 
-      <button type="submit">Create widget</button>
+      <button type="submit">投稿</button>
   }
 }
