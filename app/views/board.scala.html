@@ -1,5 +1,5 @@
 @import play.mvc.Http.Request
-@(widgets: Seq[Widget], form: Form[WidgetData])(implicit request: Request, messages: play.i18n.Messages)
+@(widgets: Seq[Widget], deleteForm: Form[DeleteFormData], form: Form[WidgetData])(implicit request: Request, messages: play.i18n.Messages)
 
 @main("なんでも実況j") {
   <h1>掲示板</h1>
@@ -33,4 +33,11 @@
 
       <button type="submit">投稿</button>
   }
+
+  @helper.form(routes.FormController.delete) {
+        @helper.CSRF.formField
+
+        @helper.checkbox(deleteForm("id"))
+        <button type="submit">削除</button>
+    }
 }
