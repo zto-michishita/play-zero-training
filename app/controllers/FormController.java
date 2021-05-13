@@ -17,7 +17,6 @@ import javax.inject.Singleton;
 import java.util.List;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
-import java.lang.Integer;
 
 import static play.libs.Scala.asScala;
     
@@ -75,9 +74,9 @@ public class FormController extends Controller {
             return badRequest(views.html.board.render(asScala(widgets), boundForm, form, request, messagesApi.preferred(request)));
         } else {
             DeleteFormData data = boundForm.get();
-            User.find.ref(data.id).delete();
-            widgets.subList(data.id).clear();
-            return redirect(routes.deleteFormController.showForm()).flashing("info", "削除しました");
+            User.finder.ref(data.getId()).delete();
+            widgets.remove((data.getId().intValue()));
+            return redirect(routes.FormController.showForm()).flashing("info", "削除しました");
         }
     }
 
