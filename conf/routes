@@ -8,6 +8,7 @@ GET     /hello                      controllers.HomeController.hello(name: Strin
 GET     /board                      controllers.FormController.showForm(request: Request)
 POST    /create                     controllers.FormController.create(request: Request)
 POST    /delete                     controllers.FormController.delete(request: Request)
+POST    /update                     controllers.FormController.update(request: Request)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
