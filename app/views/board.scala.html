@@ -1,36 +1,47 @@
 @import play.mvc.Http.Request
-@(widgets: Seq[Widget], form: Form[WidgetData])(implicit request: Request, messages: play.i18n.Messages)
+@(users: List[User], deleteForm: Form[DeleteFormData], form: Form[WidgetData])(implicit request: Request, messages:
+play.i18n.Messages)
 
 @main("なんでも実況j") {
-  <h1>掲示板</h1>
+<h1>掲示板</h1>
 
-  @request.flash.asScala().data.map { case (name, value) =>
-    <div class="@name">@value</div>
-  }
+@request.flash.asScala().data.map { case (name, value) =>
+<div class="@name">@value</div>
+}
 
-  <table>
-      @for(w <- widgets) {
-          <tr><td>@w.name</td><td>@w.text</td></tr>
-      }
-  </table>
 
-  <hr/>
+<table>
+    @for(u <- users) { <tr>
+        <td>@u.id</td>
+        <td>@u.name</td>
+        <td>@u.text</td>
+        </tr>
+        }
+</table>
+@helper.form(routes.FormController.delete) {
+@helper.CSRF.formField
+<td>@helper.inputText(deleteForm("id"))</td>
+<button type="submit">削除</button>
+}
 
-  @if(form.hasGlobalErrors) {
-      @form.globalErrors.asScala.map { error: play.data.validation.ValidationError =>
-          <div>
-              @error.key: @error.message
-          </div>
-      }
-  }
 
-  @helper.form(routes.FormController.create) {
-      @helper.CSRF.formField
+<hr />
 
-      @helper.inputText(form("name"))
+@if(form.hasGlobalErrors) {
+@form.globalErrors.asScala.map { error: play.data.validation.ValidationError =>
+<div>
+    @error.key: @error.message
+</div>
+}
+}
 
-      @helper.inputText(form("text"))
+@helper.form(routes.FormController.create) {
+@helper.CSRF.formField
 
-      <button type="submit">投稿</button>
-  }
+@helper.inputText(form("name"))
+
+@helper.inputText(form("text"))
+
+<button type="submit">投稿</button>
+}
 }
