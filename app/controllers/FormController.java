@@ -1,6 +1,9 @@
 package controllers;
 
 import models.User;
+import models.CreateForm;
+import models.DeleteForm;
+import models.UpdateForm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +24,9 @@ import static play.libs.Scala.asScala;
     
 @Singleton
 public class FormController extends Controller {
-    private final Form<WidgetData> form;
-    private final Form<DeleteFormData> deleteForm;
+    private final Form<CreateForm> createForm;
+    private final Form<DeleteForm> deleteForm;
+    private final Form<UpdateForm> updateForm
 
     private MessagesApi messagesApi;
     private List<User> users;
@@ -33,24 +37,24 @@ public class FormController extends Controller {
 
     @Inject
     public FormController(FormFactory formFactory, MessagesApi messagesApi) {
-        this.form = formFactory.form(WidgetData.class);
-        this.deleteForm = formFactory.form(DeleteFormData.class);
+        this.createForm = formFactory.form(CreateForm.class);
+        this.deleteForm = formFactory.form(DeleteForm.class);
         this.messagesApi = messagesApi;
     }
 
     public Result showForm(Http.Request request) {
         this.users = User.finder.all();
-        return ok(views.html.board.render(users, deleteForm, form, request, messagesApi.preferred(request)));
+        return ok(views.html.board.render(users, deleteForm, createForm, request, messagesApi.preferred(request)));
     }
 
     public Result create(Http.Request request) {
-        final Form<WidgetData> boundForm = form.bindFromRequest(request);
+        final Form<CreateForm> boundForm = createForm.bindFromRequest(request);
 
         if (boundForm.hasErrors()) {
             logger.error("errors = {}", boundForm.errors());
             return badRequest(views.html.board.render(users, deleteForm, boundForm, request, messagesApi.preferred(request)));
         } else {
-            WidgetData data = boundForm.get();
+            CreateForm data = boundForm.get();
             User addUser = new User();
             addUser.setName(data.getName());
             addUser.setText(data.getText());
@@ -60,15 +64,28 @@ public class FormController extends Controller {
     }
 
     public Result delete(Http.Request request) {
-        final Form<DeleteFormData> boundForm = deleteForm.bindFromRequest(request);
+        final Form<DeleteForm> boundForm = deleteForm.bindFromRequest(request);
 
         if (boundForm.hasErrors()) {
             logger.error("errors = {}", boundForm.errors());
-            return badRequest(views.html.board.render(users, boundForm, form, request, messagesApi.preferred(request)));
+            return badRequest(views.html.board.render(users, boundForm, createForm, request, messagesApi.preferred(request)));
         } else {
-            DeleteFormData data = boundForm.get();
+            DeleteForm data = boundForm.get();
             User.finder.ref(data.getId()).delete();
             return redirect(routes.FormController.showForm()).flashing("info", "削除しました");
+        }
+    }
+
+    public Result update(Http.Request request) {
+        final Form<UpdateForm> boundForm = updateForm.bindFromRequest(request);
+
+        if (boundForm.hasErrors()) {
+            logger.error("errors = {}", boundForm.errors());
+            return badRequest(views.html.board.render(users, boundForm, createForm, request, messagesApi.preferred(request)));
+        } else {
+            UpdateForm data = boundForm.get();
+            User.finder.ref(data.getId()).delete();
+            return redirect(routes.FormController.showForm()).flashing("info", "修正しました");
         }
     }
 
