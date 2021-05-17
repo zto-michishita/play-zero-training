@@ -1,17 +1,15 @@
 @import play.mvc.Http.Request
-@(users: List[User], updateForm: Form[UpdateForm])(implicit request: Request, messages: play.i18n.Messages)
+@(user: User, updateForm: Form[UpdateForm])(implicit request: Request, messages: play.i18n.Messages)
 
 @main("なんでも実況j") {
     <h1>修正</h1>
 
     <table>
-        @for(u <- users) {
             <tr>
-                <td>@u.id</td>
-                <td>@u.name</td>
-                <td>@u.text</td>
+                <td>@user.id</td>
+                <td>@user.name</td>
+                <td>@user.text</td>
             </tr>
-        }
     </table>
 
 @helper.form(routes.FormController.update) {

@@ -36,10 +36,12 @@ public class FormController extends Controller {
 
     @Inject
     public FormController(FormFactory formFactory, MessagesApi messagesApi) {
+        this.users = User.finder.all();
+        this.messagesApi = messagesApi;
+
         this.createForm = formFactory.form(CreateForm.class);
         this.deleteForm = formFactory.form(DeleteForm.class);
         this.updateForm = formFactory.form(UpdateForm.class);
-        this.messagesApi = messagesApi;
     }
 
     public Result showForm(Http.Request request) {
@@ -48,8 +50,13 @@ public class FormController extends Controller {
     }
 
     public Result fixForm(Http.Request request, Long id) {
-        this.updateUser = User.finder.byId(id);
-        return ok(views.html.fix.render(users, updateForm, request, messagesApi.preferred(request)));
+        if(id != null && User.finder.byId(id) != null) {
+            this.updateUser = User.finder.byId(id);
+            return ok(views.html.fix.render(updateUser, updateForm, request, messagesApi.preferred(request)));
+        }
+        else {
+            return redirect(routes.FormController.showForm());
+        }
     }
 
     public Result create(Http.Request request) {
@@ -86,7 +93,7 @@ public class FormController extends Controller {
 
         if (boundForm.hasErrors()) {
             logger.error("errors = {}", boundForm.errors());
-            return badRequest(views.html.fix.render(users, boundForm, request, messagesApi.preferred(request)));
+            return badRequest(views.html.fix.render(updateUser, boundForm, request, messagesApi.preferred(request)));
         } else {
             UpdateForm data = boundForm.get();
             this.updateUser.setName(data.getName());
