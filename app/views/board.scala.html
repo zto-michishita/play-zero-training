@@ -1,5 +1,5 @@
 @import play.mvc.Http.Request
-@(users: List[User], deleteForm: Form[DeleteFormData], form: Form[WidgetData])(implicit request: Request, messages:
+@(users: List[User], deleteForm: Form[DeleteForm], createForm: Form[CreateForm])(implicit request: Request, messages:
 play.i18n.Messages)
 
 @main("なんでも実況j") {
@@ -11,24 +11,30 @@ play.i18n.Messages)
 
 
 <table>
-    @for(u <- users) { <tr>
+    @for(u <- users) {
+        <tr>
         <td>@u.id</td>
         <td>@u.name</td>
         <td>@u.text</td>
+        <td>
+            <a href="@routes.FormController.fixForm(u.id)">修正する</a>
+        </td>
         </tr>
-        }
+    }
 </table>
-@helper.form(routes.FormController.delete) {
-@helper.CSRF.formField
-<td>@helper.inputText(deleteForm("id"))</td>
-<button type="submit">削除</button>
+@if(!users.isEmpty) {
+    @helper.form(routes.FormController.delete) {
+        @helper.CSRF.formField
+        @helper.inputText(deleteForm("id"))
+        <button type="submit">削除</button>
+    }
 }
 
 
 <hr />
 
-@if(form.hasGlobalErrors) {
-@form.globalErrors.asScala.map { error: play.data.validation.ValidationError =>
+@if(createForm.hasGlobalErrors) {
+@createForm.globalErrors.asScala.map { error: play.data.validation.ValidationError =>
 <div>
     @error.key: @error.message
 </div>
@@ -38,9 +44,9 @@ play.i18n.Messages)
 @helper.form(routes.FormController.create) {
 @helper.CSRF.formField
 
-@helper.inputText(form("name"))
+@helper.inputText(createForm("name"))
 
-@helper.inputText(form("text"))
+@helper.inputText(createForm("text"))
 
 <button type="submit">投稿</button>
 }

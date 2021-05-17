@@ -1,8 +1,8 @@
-package controllers;
+package models;
 
 import play.data.validation.Constraints;
 
-public class WidgetData{
+public class CreateForm {
 
     @Constraints.Required
     private String name;
@@ -10,7 +10,7 @@ public class WidgetData{
     @Constraints.Required
     private String text;
 
-    public WidgetData() {
+    public CreateForm() {
     }
 
     public String getName() {

@@ -1,12 +1,12 @@
-package controllers;
+package models;
 
 import play.data.validation.Constraints;
 
-public class DeleteFormData {
+public class DeleteForm {
     @Constraints.Required
     private Long id;
 
-    public DeleteFormData() {
+    public DeleteForm() {
     }
 
     public Long getId() {

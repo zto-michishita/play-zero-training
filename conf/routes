@@ -6,8 +6,10 @@
 GET     /                           controllers.HomeController.index()
 GET     /hello                      controllers.HomeController.hello(name: String)
 GET     /board                      controllers.FormController.showForm(request: Request)
+GET     /fix/:id                    controllers.FormController.fixForm(request: Request, id: Long)
 POST    /create                     controllers.FormController.create(request: Request)
 POST    /delete                     controllers.FormController.delete(request: Request)
+POST    /update                     controllers.FormController.update(request: Request)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
