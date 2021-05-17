@@ -32,8 +32,6 @@ public class FormController extends Controller {
     private List<User> users;
     private User updateUser;
 
-    private final Long master = 0l;
-
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
