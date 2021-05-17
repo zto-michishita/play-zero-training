@@ -11,17 +11,23 @@ play.i18n.Messages)
 
 
 <table>
-    @for(u <- users) { <tr>
+    @for(u <- users) {
+        <tr>
         <td>@u.id</td>
         <td>@u.name</td>
         <td>@u.text</td>
+        <td>
+            <a href="@routes.FormController.fixForm(u.id)">修正する</a>
+        </td>
         </tr>
-        }
+    }
 </table>
-@helper.form(routes.FormController.delete) {
-@helper.CSRF.formField
-<td>@helper.inputText(deleteForm("id"))</td>
-<button type="submit">削除</button>
+@if(!users.isEmpty) {
+    @helper.form(routes.FormController.delete) {
+        @helper.CSRF.formField
+        @helper.inputText(deleteForm("id"))
+        <button type="submit">削除</button>
+    }
 }
 
 
