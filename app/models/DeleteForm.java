@@ -3,7 +3,7 @@ package models;
 import play.data.validation.Constraints;
 
 public class DeleteForm {
-    @Constraints.Required
+    @Constraints.Required(message="必須入力です")
     private Long id;
 
     public DeleteForm() {
