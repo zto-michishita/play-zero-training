@@ -4,10 +4,10 @@ import play.data.validation.Constraints;
 
 public class CreateForm {
 
-    @Constraints.Required
+    @Constraints.Required(message="必須入力です")
     private String name;
 
-    @Constraints.Required
+    @Constraints.Required(message="必須入力です")
     private String text;
 
     public CreateForm() {
