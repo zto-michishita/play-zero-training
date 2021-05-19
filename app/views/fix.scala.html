@@ -15,7 +15,7 @@
     @helper.form(routes.FormController.update) {
         @helper.CSRF.formField
         @helper.inputText(updateForm("name"))
-        @helper.inputText(updateForm("text"))
+        @helper.textarea(updateForm("text"))
         <button type="submit">修正</button>
     }
 }
