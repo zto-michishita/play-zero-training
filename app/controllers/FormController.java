@@ -52,7 +52,10 @@ public class FormController extends Controller {
     public Result fixForm(Http.Request request, Long id) {
         if(id != null && User.finder.byId(id) != null) {
             this.updateUser = User.finder.byId(id);
-            return ok(views.html.fix.render(updateUser, updateForm, request, messagesApi.preferred(request)));
+            UpdateForm form = new UpdateForm();
+            form.setName(this.updateUser.name);
+            form.setText(this.updateUser.text);
+            return ok(views.html.fix.render(updateUser, updateForm.fill(form), request, messagesApi.preferred(request)));
         }
         else {
             return redirect(routes.FormController.showForm());
