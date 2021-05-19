@@ -17,11 +17,7 @@ import io.ebean.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
-import com.google.common.collect.Lists;
-import java.util.ArrayList;
 
-import static play.libs.Scala.asScala;
-    
 @Singleton
 public class FormController extends Controller {
     private final Form<BoardCreateForm> boardCreateForm;

@@ -12,13 +12,10 @@
             </tr>
     </table>
 
-@helper.form(routes.FormController.update) {
-@helper.CSRF.formField
-
-@helper.inputText(updateForm("name"))
-
-@helper.inputText(updateForm("text"))
-
-<button type="submit">修正</button>
-}
+    @helper.form(routes.FormController.update) {
+        @helper.CSRF.formField
+        @helper.inputText(updateForm("name"))
+        @helper.inputText(updateForm("text"))
+        <button type="submit">修正</button>
+    }
 }

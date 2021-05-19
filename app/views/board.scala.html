@@ -3,51 +3,54 @@
 play.i18n.Messages)
 
 @main("なんでも実況j") {
-<h1>掲示板</h1>
 
-@request.flash.asScala().data.map { case (name, value) =>
-<div class="@name">@value</div>
-}
+    <h1>掲示板</h1>
 
-
-<table>
-    @for(u <- users) {
-        <tr>
-        <td>@u.getId()</td>
-        <td>@u.getName()</td>
-        <td>@u.getText()</td>
-        <td>
-            <a href="@routes.FormController.fixForm(u.getId())">修正する</a>
-        </td>
-        </tr>
+    @request.flash.asScala().data.map { case (name, value) =>
+    <div class="@name">@value</div>
     }
-</table>
-@if(!users.isEmpty) {
-    @helper.form(routes.FormController.delete) {
+
+
+    <table>
+        @for(u <- users) {
+            <tr>
+            <td>@u.getId()</td>
+            <td>@u.getName()</td>
+            <td>@u.getText()</td>
+            <td>
+                <a href="@routes.FormController.fixForm(u.getId())">修正する</a>
+            </td>
+            </tr>
+
+        }
+    </table>
+
+    @if(!users.isEmpty) {
+        @helper.form(routes.FormController.delete) {
+            @helper.CSRF.formField
+            @helper.inputText(deleteForm("id"))
+            <button type="submit">削除</button>
+        }
+    }
+
+
+    <hr />
+
+    @if(createForm.hasGlobalErrors) {
+        @createForm.globalErrors.asScala.map { error: play.data.validation.ValidationError =>
+        <div>
+            @error.key: @error.message
+        </div>
+        }
+    }
+
+    @helper.form(routes.FormController.create) {
         @helper.CSRF.formField
-        @helper.inputText(deleteForm("id"))
-        <button type="submit">削除</button>
+
+        @helper.inputText(createForm("name"))
+
+        @helper.inputText(createForm("text"))
+
+        <button type="submit">投稿</button>
     }
-}
-
-
-<hr />
-
-@if(createForm.hasGlobalErrors) {
-@createForm.globalErrors.asScala.map { error: play.data.validation.ValidationError =>
-<div>
-    @error.key: @error.message
-</div>
-}
-}
-
-@helper.form(routes.FormController.create) {
-@helper.CSRF.formField
-
-@helper.inputText(createForm("name"))
-
-@helper.inputText(createForm("text"))
-
-<button type="submit">投稿</button>
-}
 }
