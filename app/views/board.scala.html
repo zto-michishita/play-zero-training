@@ -13,11 +13,11 @@ play.i18n.Messages)
 <table>
     @for(u <- users) {
         <tr>
-        <td>@u.id</td>
-        <td>@u.name</td>
-        <td>@u.text</td>
+        <td>@u.getId()</td>
+        <td>@u.getName()</td>
+        <td>@u.getText()</td>
         <td>
-            <a href="@routes.FormController.fixForm(u.id)">修正する</a>
+            <a href="@routes.FormController.fixForm(u.getId())">修正する</a>
         </td>
         </tr>
     }

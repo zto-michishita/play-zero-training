@@ -53,8 +53,8 @@ public class FormController extends Controller {
         if(id != null && User.finder.byId(id) != null) {
             this.updateUser = User.finder.byId(id);
             BoardUpdateForm form = new BoardUpdateForm();
-            form.setName(this.updateUser.name);
-            form.setText(this.updateUser.text);
+            form.setName(this.updateUser.getName());
+            form.setText(this.updateUser.getText());
             return ok(views.html.fix.render(updateUser, boardUpdateForm.fill(form), request, messagesApi.preferred(request)));
         }
         else {
