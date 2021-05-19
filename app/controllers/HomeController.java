@@ -3,7 +3,6 @@ package controllers;
 import play.mvc.*;
 
 import javax.inject.Singleton;
-import java.util.List;
 
 import models.User;
 
