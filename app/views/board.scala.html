@@ -1,56 +1,72 @@
 @import play.mvc.Http.Request
-@(users: List[User], deleteForm: Form[BoardDeleteForm], createForm: Form[BoardCreateForm])(implicit request: Request, messages:
+@(users: List[User], deleteForm: Form[BoardDeleteForm], createForm: Form[BoardCreateForm])(implicit request: Request,
+messages:
 play.i18n.Messages)
 
 @main("なんでも実況j") {
+<div class="d-flex justify-content-center" style="width: 100%; height: 100px;">
+    <h1 class="align-self-center">掲示板</h1>
+</div>
 
-    <h1>掲示板</h1>
-
-    @request.flash.asScala().data.map { case (name, value) =>
+@request.flash.asScala().data.map { case (name, value) =>
     <div class="@name">@value</div>
-    }
+}
 
-
-    <table>
-        @for(u <- users) {
+<div class="container">
+    <table class="table">
+        <thead>
             <tr>
-            <td>@u.getId()</td>
-            <td>@u.getName()</td>
-            <td>@u.getText()</td>
-            <td>
-                <a href="@routes.FormController.fixForm(u.getId())">修正する</a>
-            </td>
+                <th scope="col">id</th>
+                <th scope="col">名前</th>
+                <th scope="col">コメント</th>
+                <th scope="col">修正</th>
             </tr>
-
+        </thead>
+        <tbody>
+        @for(u <- users) { 
+            <tr>
+                <th scope="col">@u.getId()</th>
+                <td>@u.getName()</td>
+                <td>@u.getText()</td>
+                <td><a href="@routes.FormController.fixForm(u.getId())">修正する</a></td>
+            </tr>
         }
+        </tbody>
     </table>
+</div>
 
-    @if(!users.isEmpty) {
+<div class="container">
+    <div class="container border border-light w-50">
+        @if(!users.isEmpty) {
         @helper.form(routes.FormController.delete) {
             @helper.CSRF.formField
-            @helper.inputText(deleteForm("id"))
-            <button type="submit">削除</button>
+            <div class="form-group">
+                @helper.inputText(deleteForm("id"),Symbol("class") -> "form-control w-25", Symbol("id") -> "exampleInputEmail1")
+            </div>
+            <button type="submit" class="btn btn-primary">削除</button>
+            }
         }
-    }
-
-
-    <hr />
-
-    @if(createForm.hasGlobalErrors) {
+    </div>
+    
+    <div class="container border border-light w-50">
+        @if(createForm.hasGlobalErrors) {
         @createForm.globalErrors.asScala.map { error: play.data.validation.ValidationError =>
         <div>
             @error.key: @error.message
         </div>
         }
-    }
-
-    @helper.form(routes.FormController.create) {
+        }
+        @helper.form(routes.FormController.create) {
         @helper.CSRF.formField
-
-        @helper.inputText(createForm("name"))
-
-        @helper.textarea(createForm("text"))
-
-        <button type="submit">投稿</button>
-    }
+        <div class="form-group">
+            @helper.inputText(createForm("name"),Symbol("class") -> "form-control w-50", Symbol("id") -> "exampleInputEmail1")
+        </div>
+        <div class="form-group">
+            @helper.textarea(createForm("text"),Symbol("class") -> "form-control w-50", Symbol("id") -> "exampleInputEmail1")
+        </div>
+        
+        <button type="submit" class="btn btn-primary">投稿</button>
+        }
+    </div>
+</div>
 }
