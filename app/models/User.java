@@ -13,20 +13,16 @@ public class User extends Model {
     public static Finder<Long,User> finder = new Finder<>(User.class);
 
     @Id
-    public Long id;
+    private Long id;
     
     @Constraints.Required
-    public String name;
+    private String name;
 
     @Constraints.Required
-    public String text;
+    private String text;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

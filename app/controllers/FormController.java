@@ -1,9 +1,9 @@
 package controllers;
 
 import models.User;
-import models.CreateForm;
-import models.DeleteForm;
-import models.UpdateForm;
+import models.BoardCreateForm;
+import models.BoardDeleteForm;
+import models.BoardUpdateForm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,16 +17,12 @@ import io.ebean.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
-import com.google.common.collect.Lists;
-import java.util.ArrayList;
 
-import static play.libs.Scala.asScala;
-    
 @Singleton
 public class FormController extends Controller {
-    private final Form<CreateForm> createForm;
-    private final Form<DeleteForm> deleteForm;
-    private final Form<UpdateForm> updateForm;
+    private final Form<BoardCreateForm> boardCreateForm;
+    private final Form<BoardDeleteForm> boardDeleteForm;
+    private final Form<BoardUpdateForm> boardUpdateForm;
 
     private MessagesApi messagesApi;
     private List<User> users;
@@ -39,20 +35,23 @@ public class FormController extends Controller {
         this.users = User.finder.all();
         this.messagesApi = messagesApi;
 
-        this.createForm = formFactory.form(CreateForm.class);
-        this.deleteForm = formFactory.form(DeleteForm.class);
-        this.updateForm = formFactory.form(UpdateForm.class);
+        this.boardCreateForm = formFactory.form(BoardCreateForm.class);
+        this.boardDeleteForm = formFactory.form(BoardDeleteForm.class);
+        this.boardUpdateForm = formFactory.form(BoardUpdateForm.class);
     }
 
     public Result showForm(Http.Request request) {
         this.users = User.finder.all();
-        return ok(views.html.board.render(users, deleteForm, createForm, request, messagesApi.preferred(request)));
+        return ok(views.html.board.render(users, boardDeleteForm, boardCreateForm, request, messagesApi.preferred(request)));
     }
 
     public Result fixForm(Http.Request request, Long id) {
         if(id != null && User.finder.byId(id) != null) {
             this.updateUser = User.finder.byId(id);
-            return ok(views.html.fix.render(updateUser, updateForm, request, messagesApi.preferred(request)));
+            BoardUpdateForm form = new BoardUpdateForm();
+            form.setName(this.updateUser.getName());
+            form.setText(this.updateUser.getText());
+            return ok(views.html.fix.render(updateUser, boardUpdateForm.fill(form), request, messagesApi.preferred(request)));
         }
         else {
             return redirect(routes.FormController.showForm());
@@ -60,13 +59,13 @@ public class FormController extends Controller {
     }
 
     public Result create(Http.Request request) {
-        final Form<CreateForm> boundForm = createForm.bindFromRequest(request);
+        final Form<BoardCreateForm> boundForm = boardCreateForm.bindFromRequest(request);
 
         if (boundForm.hasErrors()) {
             logger.error("errors = {}", boundForm.errors());
-            return badRequest(views.html.board.render(users, deleteForm, boundForm, request, messagesApi.preferred(request)));
+            return badRequest(views.html.board.render(users, boardDeleteForm, boundForm, request, messagesApi.preferred(request)));
         } else {
-            CreateForm data = boundForm.get();
+            BoardCreateForm data = boundForm.get();
             User addUser = new User();
             addUser.setName(data.getName());
             addUser.setText(data.getText());
@@ -76,26 +75,26 @@ public class FormController extends Controller {
     }
 
     public Result delete(Http.Request request) {
-        final Form<DeleteForm> boundForm = deleteForm.bindFromRequest(request);
+        final Form<BoardDeleteForm> boundForm = boardDeleteForm.bindFromRequest(request);
 
         if (boundForm.hasErrors()) {
             logger.error("errors = {}", boundForm.errors());
-            return badRequest(views.html.board.render(users, boundForm, createForm, request, messagesApi.preferred(request)));
+            return badRequest(views.html.board.render(users, boundForm, boardCreateForm, request, messagesApi.preferred(request)));
         } else {
-            DeleteForm data = boundForm.get();
+            BoardDeleteForm data = boundForm.get();
             User.finder.ref(data.getId()).delete();
             return redirect(routes.FormController.showForm()).flashing("info", "削除しました");
         }
     }
 
     public Result update(Http.Request request) {
-        final Form<UpdateForm> boundForm = updateForm.bindFromRequest(request);
+        final Form<BoardUpdateForm> boundForm = boardUpdateForm.bindFromRequest(request);
 
         if (boundForm.hasErrors()) {
             logger.error("errors = {}", boundForm.errors());
             return badRequest(views.html.fix.render(updateUser, boundForm, request, messagesApi.preferred(request)));
         } else {
-            UpdateForm data = boundForm.get();
+            BoardUpdateForm data = boundForm.get();
             this.updateUser.setName(data.getName());
             this.updateUser.setText(data.getText());
             Ebean.save(this.updateUser);

@@ -1,24 +1,21 @@
 @import play.mvc.Http.Request
-@(user: User, updateForm: Form[UpdateForm])(implicit request: Request, messages: play.i18n.Messages)
+@(user: User, updateForm: Form[BoardUpdateForm])(implicit request: Request, messages: play.i18n.Messages)
 
 @main("なんでも実況j") {
     <h1>修正</h1>
 
     <table>
             <tr>
-                <td>@user.id</td>
-                <td>@user.name</td>
-                <td>@user.text</td>
+                <td>@user.getId()</td>
+                <td>@user.getName()</td>
+                <td>@user.getText()</td>
             </tr>
     </table>
 
-@helper.form(routes.FormController.update) {
-@helper.CSRF.formField
-
-@helper.inputText(updateForm("name"))
-
-@helper.inputText(updateForm("text"))
-
-<button type="submit">修正</button>
-}
+    @helper.form(routes.FormController.update) {
+        @helper.CSRF.formField
+        @helper.inputText(updateForm("name"))
+        @helper.textarea(updateForm("text"))
+        <button type="submit">修正</button>
+    }
 }

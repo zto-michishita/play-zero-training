@@ -2,7 +2,7 @@ package models;
 
 import play.data.validation.Constraints;
 
-public class CreateForm {
+public class BoardCreateForm {
 
     @Constraints.Required(message="必須入力です")
     private String name;
@@ -10,7 +10,7 @@ public class CreateForm {
     @Constraints.Required(message="必須入力です")
     private String text;
 
-    public CreateForm() {
+    public BoardCreateForm() {
     }
 
     public String getName() {
