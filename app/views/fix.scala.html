@@ -2,20 +2,47 @@
 @(user: User, updateForm: Form[BoardUpdateForm])(implicit request: Request, messages: play.i18n.Messages)
 
 @main("なんでも実況j") {
-    <h1>修正</h1>
+<div class="wraper fix-wrap">
 
-    <table>
+    <div class="d-flex justify-content-center">
+        <h1 class="align-self-center">修正</h1>
+    </div>
+
+    <div class="container bg-light shadow-sm p-3 mb-5 rounded">
+        <table>
             <tr>
-                <td>@user.getId()</td>
-                <td>@user.getName()</td>
-                <td>@user.getText()</td>
+                <th>name:@user.getName() id:@user.getId()</th>
+                <td></td>
             </tr>
-    </table>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="word-break: break-all;">@user.getText()</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    @helper.form(routes.FormController.update) {
-        @helper.CSRF.formField
-        @helper.inputText(updateForm("name"))
-        @helper.textarea(updateForm("text"))
-        <button type="submit">修正</button>
-    }
+    <div class="container d-flex">
+        @helper.form(routes.FormController.update) {
+        <div class="shadow-sm p-3 mb-5 bg-white rounded">
+            <div class="border border-light">
+                <h3 class="bg-info text-light w-25 d-flex justify-content-center">編集</h3>
+                @helper.CSRF.formField
+                <div class="form-group">
+                    @helper.inputText(updateForm("name"),Symbol("class") -> "form-control", Symbol("id") ->
+                    "exampleInputEmail1")
+                </div>
+
+                <div class="form-group">
+                    @helper.textarea(updateForm("text"),Symbol("class") -> "form-control", Symbol("id") ->
+                    "exampleInputEmail1")
+                </div>
+
+                <button type="submit" class="btn btn-primary">送信</button>
+            </div>
+        </div>
+        }
+    </div>
+</div>
 }
