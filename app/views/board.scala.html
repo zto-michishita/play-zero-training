@@ -12,11 +12,11 @@ play.i18n.Messages)
     </div>
 
     @request.flash.asScala().data.map { case (name, value) =>
-        <div class="container d-flex alert alert-info w-75">
-            <div class="@name">@value</div>
-        </div>
+    <div class="container d-flex alert alert-info w-75">
+        <div class="@name">@value</div>
+    </div>
     }
-
+    @if(!users.isEmpty){
     <div class="container bg-light shadow-sm p-3 mb-5 rounded">
         <table class="container">
             @for(u <- users) { <thead>
@@ -33,9 +33,12 @@ play.i18n.Messages)
                 </tbody>
         </table>
     </div>
-
+    }
+@if(users.isEmpty){
+    <div class="container d-flex justify-content-center">
+} else {
     <div class="container d-flex justify-content-between">
-    
+}
         <div class="shadow-sm p-3 mb-5 bg-white rounded w-50">
             <div class="w-50">
                 <h3 class="bg-info text-light d-flex justify-content-center w-25">投稿</h3>
@@ -57,25 +60,25 @@ play.i18n.Messages)
                 @helper.textarea(createForm("text"),Symbol("class") -> "form-control w-75", Symbol("id") ->
                 "exampleInputEmail1")
             </div>
-    
+
             <button type="submit" class="btn btn-primary">送信</button>
             }
         </div>
 
         @if(!users.isEmpty) {
-            @helper.form(routes.FormController.delete) {
-                <div class="shadow-sm p-3 mb-5 bg-white rounded">
-                    <div class="border border-light">
-                        <h3 class="bg-info text-light w-25 d-flex justify-content-center">削除</h3>
-                        @helper.CSRF.formField
-                        <div class="form-group">
-                            @helper.inputText(deleteForm("id"),Symbol("class") -> "form-control w-25", Symbol("id") ->
-                            "exampleInputEmail1")
-                        </div>
-                        <button type="submit" class="btn btn-primary">送信</button>
-                    </div>
+        @helper.form(routes.FormController.delete) {
+        <div class="shadow-sm p-3 mb-5 bg-white rounded">
+            <div class="border border-light">
+                <h3 class="bg-info text-light w-25 d-flex justify-content-center">削除</h3>
+                @helper.CSRF.formField
+                <div class="form-group">
+                    @helper.inputText(deleteForm("id"),Symbol("class") -> "form-control w-25", Symbol("id") ->
+                    "exampleInputEmail1")
                 </div>
-            }
+                <button type="submit" class="btn btn-primary">送信</button>
+            </div>
+        </div>
+        }
         }
 
     </div>
