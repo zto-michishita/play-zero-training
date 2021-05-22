@@ -20,7 +20,7 @@ public class HomeControllerTest extends WithApplication {
     }
 
     @Test
-    public void testIndex() {
+    public void トップが表示出来るかどうか() {
         Http.RequestBuilder request = new Http.RequestBuilder()
                 .method(GET)
                 .uri("/");
@@ -29,4 +29,23 @@ public class HomeControllerTest extends WithApplication {
         assertEquals(OK, result.status());
     }
 
+    @Test
+    public void 掲示板が表示出来るかどうか() {
+        Http.RequestBuilder request = new Http.RequestBuilder()
+                .method(GET)
+                .uri("/board");
+
+        Result result = route(app, request);
+        assertEquals(OK, result.status());
+    }
+
+    @Test
+    public void fixページが表示できるかどうか() {
+        Http.RequestBuilder request = new Http.RequestBuilder()
+                .method(GET)
+                .uri("/board/fix?id=1");
+
+        Result result = route(app, request);
+        assertEquals(OK, result.status());
+    }
 }
