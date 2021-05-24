@@ -46,7 +46,7 @@ public class FormControllerTest extends WithApplication {
     public void 投稿が出来るかどうか() {
         Http.RequestBuilder request = new Http.RequestBuilder()
                 .method(POST)
-                .bodyForm(ImmutableMap.of("name","aaaa", "text", "adadawdada"))
+                .bodyForm(ImmutableMap.of("name","投稿するよ", "text", "投稿"))
                 .uri("/board/create");
 
         Result result = route(app, request);
@@ -59,6 +59,17 @@ public class FormControllerTest extends WithApplication {
                 .method(POST)
                 .bodyForm(ImmutableMap.of("id","1"))
                 .uri("/board/delete");
+
+        Result result = route(app, request);
+        assertEquals(SEE_OTHER, result.status());
+    }
+
+    @Test
+    public void 投稿の編集が出来るかどうか() {
+        Http.RequestBuilder request = new Http.RequestBuilder()
+                .method(POST)
+                .bodyForm(ImmutableMap.of("name","編集するよ", "text", "編集"))
+                .uri("/board/update");
 
         Result result = route(app, request);
         assertEquals(SEE_OTHER, result.status());
