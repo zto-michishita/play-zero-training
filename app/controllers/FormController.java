@@ -26,7 +26,7 @@ public class FormController extends Controller {
 
     private MessagesApi messagesApi;
     private List<User> users;
-    private User updateUser;
+    private User findUser;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -47,11 +47,11 @@ public class FormController extends Controller {
 
     public Result fixForm(Http.Request request, Long id) {
         if(id != null && User.finder.byId(id) != null) {
-            this.updateUser = User.finder.byId(id);
+            this.findUser = User.finder.byId(id);
             BoardUpdateForm form = new BoardUpdateForm();
-            form.setName(this.updateUser.getName());
-            form.setText(this.updateUser.getText());
-            return ok(views.html.fix.render(updateUser, boardUpdateForm.fill(form), request, messagesApi.preferred(request)));
+            form.setName(findUser.getName());
+            form.setText(findUser.getText());
+            return ok(views.html.fix.render(findUser, boardUpdateForm.fill(form), request, messagesApi.preferred(request)));
         }
         else {
             return redirect(routes.FormController.showForm());
@@ -92,12 +92,13 @@ public class FormController extends Controller {
 
         if (boundForm.hasErrors()) {
             logger.error("errors = {}", boundForm.errors());
-            return badRequest(views.html.fix.render(updateUser, boundForm, request, messagesApi.preferred(request)));
+            return badRequest(views.html.fix.render(findUser, boundForm, request, messagesApi.preferred(request)));
         } else {
             BoardUpdateForm data = boundForm.get();
-            this.updateUser.setName(data.getName());
-            this.updateUser.setText(data.getText());
-            Ebean.save(this.updateUser);
+            User updateUser = new User();
+            updateUser.setName(data.getName());
+            updateUser.setText(data.getText());
+            Ebean.save(updateUser);
             return redirect(routes.FormController.showForm()).flashing("info", "修正しました");
         }
     }
