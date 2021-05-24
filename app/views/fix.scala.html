@@ -24,11 +24,11 @@
     </div>
 
     <div class="container d-flex">
-        @helper.form(routes.FormController.update) {
+        @helper.form(routes.FormController.update()) {
+        @helper.CSRF.formField
         <div class="shadow-sm p-3 mb-5 bg-white rounded">
             <div class="border border-light">
                 <h3 class="bg-info text-light w-25 d-flex justify-content-center">編集</h3>
-                @helper.CSRF.formField
                 <div class="form-group">
                     @helper.inputText(updateForm("name"),Symbol("class") -> "form-control", Symbol("id") ->
                     "exampleInputEmail1")
