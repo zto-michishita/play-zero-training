@@ -89,12 +89,12 @@ public class FormController extends Controller {
 
     public Result update(Http.Request request) {
         final Form<BoardUpdateForm> boundForm = boardUpdateForm.bindFromRequest(request);
+        BoardUpdateForm data = boundForm.get();
 
-        if (boundForm.hasErrors()) {
+        if (boundForm.hasErrors() && data.getName() == null && data.getText() == null) {
             logger.error("errors = {}", boundForm.errors());
             return badRequest(views.html.fix.render(findUser, boundForm, request, messagesApi.preferred(request)));
         } else {
-            BoardUpdateForm data = boundForm.get();
             User updateUser = new User();
             updateUser.setName(data.getName());
             updateUser.setText(data.getText());
