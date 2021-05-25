@@ -6,6 +6,7 @@ import play.inject.guice.GuiceApplicationBuilder;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.test.WithApplication;
+import play.test.Helpers;
 
 import static org.junit.Assert.assertEquals;
 import static play.mvc.Http.Status.OK;
