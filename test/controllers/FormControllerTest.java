@@ -59,36 +59,6 @@ public class FormControllerTest extends WithApplication {
     }
 
     @Test
-    public void 投稿のFormにnullがあったらエラーが返るかどうか() {
-        String errorText = "必須入力です";
-
-        try {
-            Http.RequestBuilder request = Helpers.fakeRequest()
-                .method(POST)
-                .bodyForm(ImmutableMap.of("name","投稿するよ", "text", ""))
-                .uri("/board/create");
-
-            Result result = route(app, request);
-            result.status();
-        } catch (IllegalStateException e) {
-            assertThat(e.getMessage(),containsString(errorText));
-        }
-
-        try {
-            Http.RequestBuilder requestTextNull = new Http.RequestBuilder()
-                .method(POST)
-                .bodyForm(ImmutableMap.of("name","TextがNull", "text", ""))
-                .uri("/board/create");
-
-            Result result = route(app, requestTextNull);
-            result.status();
-        } catch (IllegalStateException e) {
-            assertThat(e.getMessage(),containsString(errorText));
-        }
-
-    }
-
-    @Test
     public void 投稿が削除出来るかどうか() {
         Http.RequestBuilder request = Helpers.fakeRequest()
                 .method(POST)
