@@ -1,4 +1,4 @@
-package controllers;
+package test.controller;
 
 import org.junit.Test;
 import play.Application;

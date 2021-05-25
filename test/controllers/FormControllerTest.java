@@ -1,4 +1,4 @@
-package controllers;
+package test.controller;
 
 import org.junit.Test;
 import play.Application;
@@ -8,6 +8,7 @@ import play.mvc.Result;
 import play.test.Helpers;
 import play.test.WithApplication;
 import com.google.common.collect.ImmutableMap;
+import play.api.test.*;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -81,20 +82,25 @@ public class FormControllerTest extends WithApplication {
     }
 
     @Test
-    public void 投稿の編集Formにnullがあったらエラーが返るかどうか() {
-        String errorText = "必須入力です";
-        try {
-            Http.RequestBuilder request = Helpers.fakeRequest()
-                .method(POST)
-                .bodyForm(ImmutableMap.of("name","テキストがnull", "text", ""))
-                .uri("/board/update");
+    public void 投稿の編集Formにnullがあったら400番が返るかどうか() {
+        Http.RequestBuilder textNullRequest = Helpers.fakeRequest()
+            .method(POST)
+            .bodyForm(ImmutableMap.of("name","テキストがnull", "text", ""))
+            .uri("/board/create");
 
-            Result result = route(app, request);
-            result.status();
-        } catch (IllegalStateException e) {
-            assertThat(e.getMessage(),containsString(errorText));
-        }
+        textNullRequest = CSRFTokenHelper.addCSRFToken(textNullRequest);
+        Result textNullResult = route(app, textNullRequest);
+        assertEquals(BAD_REQUEST, textNullResult.status());
 
+
+        Http.RequestBuilder nameNullRequest = Helpers.fakeRequest()
+            .method(POST)
+            .bodyForm(ImmutableMap.of("name","", "text", "nameがnull"))
+            .uri("/board/create");
+
+        nameNullRequest = CSRFTokenHelper.addCSRFToken(nameNullRequest);
+        Result nameNullResult = route(app, nameNullRequest);
+        assertEquals(BAD_REQUEST, nameNullResult.status());
     }
 
 }
