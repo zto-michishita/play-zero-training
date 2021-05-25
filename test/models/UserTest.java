@@ -35,7 +35,7 @@ public class UserTest extends WithApplication {
     }
 
     @Test
-    public void データベースから値を取ってこれるか() {
+    public void データベースから値を取れるかどうか() {
         User user = User.finder.byId(1L);
         
         assertEquals("名無し", user.getName());
