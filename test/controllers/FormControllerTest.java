@@ -62,15 +62,29 @@ public class FormControllerTest extends WithApplication {
         assertEquals(SEE_OTHER, result.status());
     }
 
+    @Test
     public void 投稿のFormにnullがあったら400番が返るかどうか() {
-        Http.RequestBuilder request = Helpers.fakeRequest()
+        Http.RequestBuilder textNullRequest = Helpers.fakeRequest()
             .method(POST)
-            .bodyForm(ImmutableMap.of("name","投稿するよ", "text", ""))
+            .bodyForm(ImmutableMap.of("name","テキストがnull", "text", ""))
             .uri("/board/create");
 
-        Result result = route(app, request);
-        assertEquals(BAD_REQUEST, result.status());
+        textNullRequest = CSRFTokenHelper.addCSRFToken(textNullRequest);
+        Result textNullResult = route(app, textNullRequest);
+        assertEquals(BAD_REQUEST, textNullResult.status());
+
+
+        Http.RequestBuilder nameNullRequest = Helpers.fakeRequest()
+            .method(POST)
+            .bodyForm(ImmutableMap.of("name","", "text", "nameがnull"))
+            .uri("/board/create");
+
+        nameNullRequest = CSRFTokenHelper.addCSRFToken(nameNullRequest);
+        Result nameNullResult = route(app, nameNullRequest);
+        assertEquals(BAD_REQUEST, nameNullResult.status());
     }
+
+
 
     @Test
     public void 投稿が削除出来るかどうか() {
@@ -78,20 +92,19 @@ public class FormControllerTest extends WithApplication {
             .method(POST)
             .bodyForm(ImmutableMap.of("id","1"))
             .uri("/board/delete");
-    public void 投稿のFormにJSインジェクションがあったらただの文字列になるかどうか() {
-        Http.RequestBuilder request = new Http.RequestBuilder()
-            .method(POST)
-            .bodyForm(ImmutableMap.of("name","投稿するよ", "text", "<script> 10000 * 2 <script>"))
-            .uri("/board/create");
-
+    
         Result result = route(app, request);
-        assertThat(contentAsString(result), is(containsString("")));
+        assertEquals(SEE_OTHER, result.status());
     }
+
+    public void 削除Formにnullがあったら400番が返るかどうか() {
+        Http.RequestBuilder request = Helpers.fakeRequest()
+            .method(POST)
             .bodyForm(ImmutableMap.of("id",""))
             .uri("/board/delete");
-
+    
         Result result = route(app, request);
-        assertEquals(BAD_REQUEST, result.status());
+        assertEquals(SEE_OTHER, result.status());
     }
 
     @Test
@@ -101,8 +114,9 @@ public class FormControllerTest extends WithApplication {
             .bodyForm(ImmutableMap.of("name","編集するよ", "text", "編集"))
             .uri("/board/update");
 
+        request = CSRFTokenHelper.addCSRFToken(request);
         Result result = route(app, request);
-        assertEquals(SEE_OTHER, result.status());
+        assertEquals(BAD_REQUEST, result.status());
     }
 
     @Test
