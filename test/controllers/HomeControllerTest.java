@@ -31,23 +31,4 @@ public class HomeControllerTest extends WithApplication {
         assertEquals(OK, result.status());
     }
 
-    @Test
-    public void 掲示板が表示出来るかどうか() {
-        Http.RequestBuilder request = Helpers.fakeRequest()
-                .method(GET)
-                .uri("/board");
-
-        Result result = route(app, request);
-        assertEquals(OK, result.status());
-    }
-
-    @Test
-    public void fixページが表示できるかどうか() {
-        Http.RequestBuilder request = Helpers.fakeRequest()
-                .method(GET)
-                .uri("/board/fix?id=1");
-
-        Result result = route(app, request);
-        assertEquals(OK, result.status());
-    }
 }
