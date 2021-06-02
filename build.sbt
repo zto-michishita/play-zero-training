@@ -15,4 +15,5 @@ libraryDependencies ++= Seq(
   "javax.activation" % "activation" % "1.1.1",
   "org.glassfish.jaxb" % "jaxb-runtime" % "2.3.2",
   "mysql" % "mysql-connector-java" % "5.1.41",
+  "com.h2database" % "h2" % "1.4.192",
 )
