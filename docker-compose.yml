@@ -1,0 +1,28 @@
+version: "3"
+services:
+  web:
+    image: hseeberger/scala-sbt:8u222_1.3.5_2.13.1
+    container_name: play-framework
+    tty: true
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/root
+  db:
+    image: mysql:5.7
+    container_name: mysql-container
+    environment:
+      MYSQL_DATABASE: bouad
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    # ここはmysqlを起動すると勝手に生成される
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/db/sql:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+
+      
