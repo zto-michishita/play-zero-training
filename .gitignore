@@ -12,3 +12,4 @@ target
 .ivy2
 .cache
 .bash_history
+/db
